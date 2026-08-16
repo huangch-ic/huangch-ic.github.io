@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title></title>
+    <link href="/2026/08/16/hspice-decimal-to-binary/"/>
+    <url>/2026/08/16/hspice-decimal-to-binary/</url>
+    
+    <content type="html"><![CDATA[<h2 id="cat-my-academic-blog-source-posts-hspice-decimal-to-binary-md-‘ARTICLE’"><a href="#cat-my-academic-blog-source-posts-hspice-decimal-to-binary-md-‘ARTICLE’" class="headerlink" title="cat &gt; ~&#x2F;my-academic-blog&#x2F;source&#x2F;_posts&#x2F;hspice-decimal-to-binary.md &lt;&lt; ‘ARTICLE’"></a>cat &gt; ~&#x2F;my-academic-blog&#x2F;source&#x2F;_posts&#x2F;hspice-decimal-to-binary.md &lt;&lt; ‘ARTICLE’</h2><h2 id="title-HSPICE-仿真中十进制转二进制方法——简化多-bit-信号设置date-2026-08-16-12-20-00tags-HSPICE-电路仿真-模拟集成电路categories-技术笔记math-trueindex-img-img-random-2-png"><a href="#title-HSPICE-仿真中十进制转二进制方法——简化多-bit-信号设置date-2026-08-16-12-20-00tags-HSPICE-电路仿真-模拟集成电路categories-技术笔记math-trueindex-img-img-random-2-png" class="headerlink" title="title: HSPICE 仿真中十进制转二进制方法——简化多 bit 信号设置date: 2026-08-16 12:20:00tags:  - HSPICE  - 电路仿真  - 模拟集成电路categories:  - 技术笔记math: trueindex_img: &#x2F;img&#x2F;random&#x2F;2.png"></a>title: HSPICE 仿真中十进制转二进制方法——简化多 bit 信号设置<br>date: 2026-08-16 12:20:00<br>tags:<br>  - HSPICE<br>  - 电路仿真<br>  - 模拟集成电路<br>categories:<br>  - 技术笔记<br>math: true<br>index_img: &#x2F;img&#x2F;random&#x2F;2.png</h2><p>在使用 HSPICE 进行仿真时，常需设置多 bit 信号。若逐 bit 单独设置，当位数较多时操作繁琐，且修改输入值耗时费力。本文介绍一种通过十进制转二进制的方法，只需改变十进制变量的赋值，即可自动设置对应的二进制信号，提升仿真效率。</p><span id="more"></span><h2 id="1-方法原理：除-2-取余"><a href="#1-方法原理：除-2-取余" class="headerlink" title="1. 方法原理：除 2 取余"></a>1. 方法原理：除 2 取余</h2><p>十进制转二进制的核心是 <strong>除 2 取余法</strong>，公式为：</p><p>$$<br>a % b &#x3D; a - b \times \lfloor a&#x2F;b \rfloor<br>$$</p><p>例如，将十进制数 <code>D_DEC</code> 转换为 3-bit 二进制信号 <code>D&lt;2:0&gt;</code>，可通过数学运算提取每一位：</p><blockquote><p><strong>注意</strong>：HSPICE 的 <code>floor()</code> 是取整函数（向下取整）。</p></blockquote><pre><code class="language-spice">.PARAM D_DEC = 0* 计算每一位二进制值.PARAM D2 = &#39;floor(D_DEC/4) - 2 * floor(floor(D_DEC/4) /2)&#39;.PARAM D1 = &#39;floor(D_DEC/2) - 2 * floor(floor(D_DEC/2) /2)&#39;.PARAM D0 = &#39;floor(D_DEC/1) - 2 * floor(floor(D_DEC/1) /2)&#39;* 设置电压源V_D2 D2_node 0 DC=&#39;D2&#39;V_D1 D1_node 0 DC=&#39;D1&#39;V_D0 D0_node 0 DC=&#39;D0&#39;</code></pre>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hello World</title>
     <link href="/2026/08/15/hello-world/"/>
     <url>/2026/08/15/hello-world/</url>
