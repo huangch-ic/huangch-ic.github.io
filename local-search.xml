@@ -20,11 +20,11 @@
     
     <tags>
       
-      <tag>verilogA</tag>
-      
       <tag>电路仿真</tag>
       
       <tag>模拟集成电路</tag>
+      
+      <tag>verilogA</tag>
       
     </tags>
     
@@ -49,11 +49,11 @@
     
     <tags>
       
+      <tag>HSPICE</tag>
+      
       <tag>电路仿真</tag>
       
       <tag>模拟集成电路</tag>
-      
-      <tag>HSPICE</tag>
       
     </tags>
     
