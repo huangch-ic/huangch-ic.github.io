@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>verilogA十进制转二进制</title>
+    <link href="/2026/08/30/verilogA-decimal-to-binary/"/>
+    <url>/2026/08/30/verilogA-decimal-to-binary/</url>
+    
+    <content type="html"><![CDATA[<h1 id="8bit-VerilogA-十进制转二进制模型"><a href="#8bit-VerilogA-十进制转二进制模型" class="headerlink" title="8bit VerilogA 十进制转二进制模型"></a>8bit VerilogA 十进制转二进制模型</h1><h2 id="模块概述"><a href="#模块概述" class="headerlink" title="模块概述"></a>模块概述</h2><p><code>d2b_8bit</code> 是一个基于 VerilogA 的 8 位数字-模拟转换器（DAC）行为级模型，适用于 <strong>模拟电路仿真中总线信号的设置</strong>。该模块将输入的十进制数转换为 8 位二进制电压输出。</p><hr><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><pre><code class="language-verilog">`include &quot;constants.vams&quot;`include &quot;disciplines.vams&quot;`define binary_bits 8module d2b_8bit(out);   output [`binary_bits-1:0] out;   voltage [`binary_bits-1:0] out;   // 参数定义   parameter real decimal_number = 5;   // 输入十进制数（默认：5）   parameter real vdd = 1.8;            // 电源电压（默认：1.8V）   parameter real vss = 0;              // 地电压（默认：0V）   // 内部变量   real dout[`binary_bits-1:0];   genvar i;   real x;   real z;   analog begin       x = decimal_number;       // 十进制转二进制：逐位除2取余       for (i = 0; i &amp;lt; `binary_bits; i = i + 1) begin           z = x / 2.0;           x = floor(z);           dout[i] = ceil(z - x);  // 提取当前最低位（0 或 1）       end       // 将二进制位转换为电压输出       for (i = 0; i &amp;lt; `binary_bits; i = i + 1)           V(out[i]) &amp;lt;+ transition(dout[i] * vdd, 0, 0);   endendmodule</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术笔记</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>verilogA</tag>
+      
+      <tag>电路仿真</tag>
+      
+      <tag>模拟集成电路</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>HSPICE 仿真中十进制转二进制方法——简化多 bit 信号设置</title>
     <link href="/2026/08/16/hspice-decimal-to-binary/"/>
     <url>/2026/08/16/hspice-decimal-to-binary/</url>
@@ -20,11 +49,11 @@
     
     <tags>
       
-      <tag>HSPICE</tag>
-      
       <tag>电路仿真</tag>
       
       <tag>模拟集成电路</tag>
+      
+      <tag>HSPICE</tag>
       
     </tags>
     
