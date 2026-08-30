@@ -19,28 +19,28 @@
   <meta name="author" content="Cyrus">
   <meta name="keywords" content="">
   
-    <meta name="description" content="8bit VerilogA 十进制转二进制模型模块概述d2b_8bit 是一个基于 VerilogA 的 8 位数字-模拟转换器（DAC）行为级模型，适用于 模拟电路仿真中总线信号的设置。该模块将输入的十进制数转换为 8 位二进制电压输出。  代码实现&#96;include &quot;constants.vams&quot; &#96;include &quot;disciplines.vams&quot;">
+    <meta name="description" content="在模拟电路仿真中，经常需要为数字总线（bus）信号设置多 bit 输入。传统方式是逐位单独设置电压源，当位数较多时操作繁琐且容易出错。本文介绍一种基于 VerilogA 的 8 位十进制转二进制模型，只需修改一个十进制参数，即可自动生成对应的二进制电压输出，大幅提升仿真效率。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="verilogA十进制转二进制">
+<meta property="og:title" content="VerilogA 十进制转二进制模型（8bit DAC 行为级实现）">
 <meta property="og:url" content="https://huangch-ic.github.io/2026/08/30/verilogA-decimal-to-binary/index.html">
 <meta property="og:site_name" content="云深不知处">
-<meta property="og:description" content="8bit VerilogA 十进制转二进制模型模块概述d2b_8bit 是一个基于 VerilogA 的 8 位数字-模拟转换器（DAC）行为级模型，适用于 模拟电路仿真中总线信号的设置。该模块将输入的十进制数转换为 8 位二进制电压输出。  代码实现&#96;include &quot;constants.vams&quot; &#96;include &quot;disciplines.vams&quot;">
+<meta property="og:description" content="在模拟电路仿真中，经常需要为数字总线（bus）信号设置多 bit 输入。传统方式是逐位单独设置电压源，当位数较多时操作繁琐且容易出错。本文介绍一种基于 VerilogA 的 8 位十进制转二进制模型，只需修改一个十进制参数，即可自动生成对应的二进制电压输出，大幅提升仿真效率。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://huangch-ic.github.io/img/random/3.png">
-<meta property="article:published_time" content="2026-08-30T10:00:00.000Z">
-<meta property="article:modified_time" content="2026-08-30T09:57:39.699Z">
+<meta property="og:image" content="https://huangch-ic.github.io/2026/08/30/verilogA-decimal-to-binary/fig1.png">
+<meta property="article:published_time" content="2026-08-30T10:20:00.000Z">
+<meta property="article:modified_time" content="2026-08-30T10:20:00.000Z">
 <meta property="article:author" content="Cyrus">
-<meta property="article:tag" content="verilogA">
-<meta property="article:tag" content="模拟集成电路">
-<meta property="article:tag" content="电路仿真">
+<meta property="article:tag" content="VerilogA">
+<meta property="article:tag" content="模拟电路仿真">
+<meta property="article:tag" content="行为级建模">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://huangch-ic.github.io/img/random/3.png">
+<meta name="twitter:image" content="https://huangch-ic.github.io/2026/08/30/verilogA-decimal-to-binary/fig1.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>verilogA十进制转二进制 - 云深不知处</title>
+  <title>VerilogA 十进制转二进制模型（8bit DAC 行为级实现） - 云深不知处</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -329,7 +329,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="verilogA十进制转二进制"></span>
+            <span id="subtitle" data-typed-text="VerilogA 十进制转二进制模型（8bit DAC 行为级实现）"></span>
           
         </div>
 
@@ -340,7 +340,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-08-30 18:00" pubdate>
+        <time datetime="2026-08-30 18:20" pubdate>
           2026年8月30日 晚上
         </time>
       </span>
@@ -352,7 +352,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          697 字
+          2.4k 字
         
       </span>
     
@@ -363,7 +363,7 @@
         
         
         
-          6 分钟
+          21 分钟
         
       </span>
     
@@ -415,48 +415,139 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">verilogA十进制转二进制</h1>
+            <h1 id="seo-header">VerilogA 十进制转二进制模型（8bit DAC 行为级实现）</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="8bit-VerilogA-十进制转二进制模型"><a href="#8bit-VerilogA-十进制转二进制模型" class="headerlink" title="8bit VerilogA 十进制转二进制模型"></a>8bit VerilogA 十进制转二进制模型</h1><h2 id="模块概述"><a href="#模块概述" class="headerlink" title="模块概述"></a>模块概述</h2><p><code>d2b_8bit</code> 是一个基于 VerilogA 的 8 位数字-模拟转换器（DAC）行为级模型，适用于 <strong>模拟电路仿真中总线信号的设置</strong>。该模块将输入的十进制数转换为 8 位二进制电压输出。</p>
-<hr>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><pre><code class="language-verilog">`include &quot;constants.vams&quot;
-`include &quot;disciplines.vams&quot;
-`define binary_bits 8
+                <p>在模拟电路仿真中，经常需要为数字总线（bus）信号设置多 bit 输入。传统方式是逐位单独设置电压源，当位数较多时操作繁琐且容易出错。本文介绍一种基于 <strong>VerilogA</strong> 的 8 位十进制转二进制模型，只需修改一个十进制参数，即可自动生成对应的二进制电压输出，大幅提升仿真效率。</p>
+<span id="more"></span>
 
-module d2b_8bit(out);
-   output [`binary_bits-1:0] out;
-   voltage [`binary_bits-1:0] out;
+<h2 id="1-设计思路"><a href="#1-设计思路" class="headerlink" title="1. 设计思路"></a>1. 设计思路</h2><h3 id="1-1-核心算法：除-2-取余"><a href="#1-1-核心算法：除-2-取余" class="headerlink" title="1.1 核心算法：除 2 取余"></a>1.1 核心算法：除 2 取余</h3><p>十进制转二进制的数学基础是<strong>除 2 取余法</strong>。对于任意十进制数 $D$，其第 $i$ 位二进制值 $b_i$ 可通过以下运算提取：</p>
+<p>$$<br>b_i &#x3D; \left\lceil \frac{D}{2^i} \bmod 2 \right\rceil &#x3D; \left\lceil \frac{D}{2^i} - \left\lfloor \frac{D}{2^{i+1}} \right\rfloor \times 2 \right\rceil<br>$$</p>
+<h3 id="1-2-VerilogA-实现要点"><a href="#1-2-VerilogA-实现要点" class="headerlink" title="1.2 VerilogA 实现要点"></a>1.2 VerilogA 实现要点</h3><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>genvar</code></td>
+<td>用于 <code>analog</code> 块内的循环变量</td>
+</tr>
+<tr>
+<td><code>floor()</code> &#x2F; <code>ceil()</code></td>
+<td>VerilogA 内置数学函数</td>
+</tr>
+<tr>
+<td><code>transition()</code></td>
+<td>为输出电压添加平滑过渡，避免仿真不收敛</td>
+</tr>
+<tr>
+<td><code>V(out[i]) &lt;+</code></td>
+<td>VerilogA 的电压贡献语句</td>
+</tr>
+</tbody></table>
+<h2 id="2-完整代码"><a href="#2-完整代码" class="headerlink" title="2. 完整代码"></a>2. 完整代码</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-meta">`<span class="hljs-keyword">include</span> &quot;constants.vams&quot;</span><br><span class="hljs-meta">`<span class="hljs-keyword">include</span> &quot;disciplines.vams&quot;</span><br><span class="hljs-meta">`<span class="hljs-keyword">define</span> binary_bits 8</span><br><br><span class="hljs-keyword">module</span> d2b_8bit(out);<br>   <span class="hljs-keyword">output</span> [`binary_bits-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>] out;<br>   voltage [`binary_bits-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>] out;<br><br>   <span class="hljs-comment">// 参数定义</span><br>   <span class="hljs-keyword">parameter</span> <span class="hljs-keyword">real</span> decimal_number = <span class="hljs-number">5</span>;   <span class="hljs-comment">// 输入十进制数（默认：5）</span><br>   <span class="hljs-keyword">parameter</span> <span class="hljs-keyword">real</span> vdd = <span class="hljs-number">1</span><span class="hljs-variable">.8</span>;            <span class="hljs-comment">// 电源电压（默认：1.8V）</span><br>   <span class="hljs-keyword">parameter</span> <span class="hljs-keyword">real</span> vss = <span class="hljs-number">0</span>;              <span class="hljs-comment">// 地电压（默认：0V）</span><br><br>   <span class="hljs-comment">// 内部变量</span><br>   <span class="hljs-keyword">real</span> dout[`binary_bits-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>];<br>   <span class="hljs-keyword">genvar</span> i;<br>   <span class="hljs-keyword">real</span> x;<br>   <span class="hljs-keyword">real</span> z;<br><br>   analog <span class="hljs-keyword">begin</span><br>       x = decimal_number;<br><br>       <span class="hljs-comment">// 十进制转二进制：逐位除2取余</span><br>       <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; `binary_bits; i = i + <span class="hljs-number">1</span>) <span class="hljs-keyword">begin</span><br>           z = x / <span class="hljs-number">2</span><span class="hljs-variable">.0</span>;<br>           x = floor(z);<br>           dout[i] = ceil(z - x);  <span class="hljs-comment">// 提取当前最低位（0 或 1）</span><br>       <span class="hljs-keyword">end</span><br><br>       <span class="hljs-comment">// 将二进制位转换为电压输出</span><br>       <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; `binary_bits; i = i + <span class="hljs-number">1</span>)<br>           V(out[i]) &lt;+ transition(dout[i] * vdd, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br>   <span class="hljs-keyword">end</span><br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
 
-   // 参数定义
-   parameter real decimal_number = 5;   // 输入十进制数（默认：5）
-   parameter real vdd = 1.8;            // 电源电压（默认：1.8V）
-   parameter real vss = 0;              // 地电压（默认：0V）
+<h2 id="3-代码解析"><a href="#3-代码解析" class="headerlink" title="3. 代码解析"></a>3. 代码解析</h2><h3 id="3-1-参数化设计"><a href="#3-1-参数化设计" class="headerlink" title="3.1 参数化设计"></a>3.1 参数化设计</h3><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">parameter</span> <span class="hljs-keyword">real</span> decimal_number = <span class="hljs-number">5</span>;   <span class="hljs-comment">// 只需修改这一个值</span><br><span class="hljs-keyword">parameter</span> <span class="hljs-keyword">real</span> vdd = <span class="hljs-number">1</span><span class="hljs-variable">.8</span>;          <span class="hljs-comment">// 适配不同工艺节点</span><br><span class="hljs-keyword">parameter</span> <span class="hljs-keyword">real</span> vss = <span class="hljs-number">0</span>;<br></code></pre></td></tr></table></figure>
 
-   // 内部变量
-   real dout[`binary_bits-1:0];
-   genvar i;
-   real x;
-   real z;
+<p><strong>仿真时只需修改 <code>decimal_number</code> 的值</strong>，模块会自动计算并输出对应的 8 位二进制电压信号。例如：</p>
+<table>
+<thead>
+<tr>
+<th>decimal_number</th>
+<th>输出电压（out[7:0]）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0000 0000</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0000 0101</td>
+</tr>
+<tr>
+<td>127</td>
+<td>0111 1111</td>
+</tr>
+<tr>
+<td>255</td>
+<td>1111 1111</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-关键循环逻辑"><a href="#3-2-关键循环逻辑" class="headerlink" title="3.2 关键循环逻辑"></a>3.2 关键循环逻辑</h3><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; `binary_bits; i = i + <span class="hljs-number">1</span>) <span class="hljs-keyword">begin</span><br>    z = x / <span class="hljs-number">2</span><span class="hljs-variable">.0</span>;           <span class="hljs-comment">// 除以 2</span><br>    x = floor(z);          <span class="hljs-comment">// 取整，准备下一次迭代</span><br>    dout[i] = ceil(z - x); <span class="hljs-comment">// 判断是否有余数：0 或 1</span><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
 
-   analog begin
-       x = decimal_number;
+<p>以 <code>decimal_number = 5</code> 为例：</p>
+<table>
+<thead>
+<tr>
+<th>迭代 i</th>
+<th>x（初始）</th>
+<th>z &#x3D; x&#x2F;2</th>
+<th>x &#x3D; floor(z)</th>
+<th>dout[i] &#x3D; ceil(z-x)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>5.0</td>
+<td>2.5</td>
+<td>2.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1.0</td>
+<td>0.5</td>
+<td>0.0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3~7</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>最终得到 <code>dout = {0,0,0,0,0,1,0,1}</code>，即二进制 <strong>0000 0101</strong>。</p>
+<h3 id="3-3-电压输出"><a href="#3-3-电压输出" class="headerlink" title="3.3 电压输出"></a>3.3 电压输出</h3><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs verilog">V(out[i]) &lt;+ transition(dout[i] * vdd, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
 
-       // 十进制转二进制：逐位除2取余
-       for (i = 0; i &amp;lt; `binary_bits; i = i + 1) begin
-           z = x / 2.0;
-           x = floor(z);
-           dout[i] = ceil(z - x);  // 提取当前最低位（0 或 1）
-       end
+<ul>
+<li><code>dout[i] * vdd</code>：将 0&#x2F;1 转换为 0V &#x2F; 1.8V</li>
+<li><code>transition(..., 0, 0)</code>：添加零延迟平滑过渡，避免电压跳变导致仿真器不收敛</li>
+</ul>
+<h2 id="4-使用示例"><a href="#4-使用示例" class="headerlink" title="4. 使用示例"></a>4. 使用示例</h2><p>在 Spectre &#x2F; HSPICE 等仿真器中调用该模块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs spice">// 实例化 8bit DAC 模型<br>I0 (out&lt;7:0&gt;) d2b_8bit<br>    decimal_number=127<br>    vdd=1.8<br></code></pre></td></tr></table></figure>
 
-       // 将二进制位转换为电压输出
-       for (i = 0; i &amp;lt; `binary_bits; i = i + 1)
-           V(out[i]) &amp;lt;+ transition(dout[i] * vdd, 0, 0);
-   end
-endmodule
-</code></pre>
+<p align="center">
+  <img src="fig1.png" srcset="/img/loading.gif" lazyload alt="图1 设置示意图" width="500">
+</p>
+或在 VerilogA 测试平台中：
+
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">module</span> tb_d2b;<br>    voltage [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] bus_out;<br><br>    d2b_8bit <span class="hljs-variable">#(.decimal_number(200), .vdd(3.3)) dac (.out(bus_out))</span>;<br><br>    analog <span class="hljs-keyword">begin</span><br>        <span class="hljs-built_in">$strobe</span>(<span class="hljs-string">&quot;out = %b&quot;</span>, bus_out);<br>    <span class="hljs-keyword">end</span><br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5-扩展：N-bit-通用模型"><a href="#5-扩展：N-bit-通用模型" class="headerlink" title="5. 扩展：N-bit 通用模型"></a>5. 扩展：N-bit 通用模型</h2><p>将宏定义改为参数即可支持任意位数：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">module</span> d2b_nbit(out);<br>   <span class="hljs-keyword">parameter</span> <span class="hljs-keyword">integer</span> N = <span class="hljs-number">8</span>;           <span class="hljs-comment">// 位数可配置</span><br>   <span class="hljs-keyword">output</span> [N-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>] out;<br>   voltage [N-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>] out;<br>   <span class="hljs-comment">// ... 其余逻辑相同，将 `binary_bits 替换为 N</span><br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>本文介绍的 VerilogA 模型通过参数化设计，实现了<strong>十进制到多 bit 二进制电压的自动转换</strong>。相比手动设置每个 bit 的电压源，该方法具有以下优势：</p>
+<ol>
+<li><strong>修改方便</strong>：只需调整一个 <code>decimal_number</code> 参数</li>
+<li><strong>可复用性强</strong>：通过参数适配不同位数和电源电压</li>
+<li><strong>仿真稳定</strong>：<code>transition()</code> 函数确保电压平滑变化</li>
+<li><strong>代码简洁</strong>：利用 VerilogA 内置数学函数，无需外部依赖</li>
+</ol>
+<p>该模型特别适用于 <strong>ADC&#x2F;DAC 行为级仿真</strong>、<strong>数字控制环路验证</strong> 等需要频繁调整总线输入值的场景。</p>
 
                 
               </div>
@@ -490,11 +581,11 @@ endmodule
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%94%B5%E8%B7%AF%E4%BB%BF%E7%9C%9F/" class="print-no-link">#电路仿真</a>
+        <a href="/tags/VerilogA/" class="print-no-link">#VerilogA</a>
       
-        <a href="/tags/%E6%A8%A1%E6%8B%9F%E9%9B%86%E6%88%90%E7%94%B5%E8%B7%AF/" class="print-no-link">#模拟集成电路</a>
+        <a href="/tags/%E8%A1%8C%E4%B8%BA%E7%BA%A7%E5%BB%BA%E6%A8%A1/" class="print-no-link">#行为级建模</a>
       
-        <a href="/tags/verilogA/" class="print-no-link">#verilogA</a>
+        <a href="/tags/%E6%A8%A1%E6%8B%9F%E7%94%B5%E8%B7%AF%E4%BB%BF%E7%9C%9F/" class="print-no-link">#模拟电路仿真</a>
       
     </div>
   
@@ -506,7 +597,7 @@ endmodule
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>verilogA十进制转二进制</div>
+      <div>VerilogA 十进制转二进制模型（8bit DAC 行为级实现）</div>
       <div>https://huangch-ic.github.io/2026/08/30/verilogA-decimal-to-binary/</div>
     </div>
     <div class="license-meta">
@@ -550,6 +641,12 @@ endmodule
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2026/08/30/VerilogA-d2b/" title="VerilogA_d2b">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">VerilogA_d2b</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

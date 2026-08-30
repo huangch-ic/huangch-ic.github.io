@@ -354,24 +354,18 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2026/08/30/verilogA-decimal-to-binary/" target="_self">
-          <img src="/img/random/3.png" srcset="/img/loading.gif" lazyload alt="verilogA十进制转二进制">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
+    <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2026/08/30/verilogA-decimal-to-binary/" target="_self">
-          verilogA十进制转二进制
+        <a href="/2026/08/30/VerilogA-d2b/" target="_self">
+          VerilogA_d2b
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2026/08/30/verilogA-decimal-to-binary/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2026/08/30/VerilogA-d2b/" target="_self">
         <div>
-          8bit VerilogA 十进制转二进制模型模块概述d2b_8bit 是一个基于 VerilogA 的 8 位数字-模拟转换器（DAC）行为级模型，适用于 模拟电路仿真中总线信号的设置。该模块将输入的十进制数转换为 8 位二进制电压输出。  代码实现`include &quot;constants.vams&quot; `include &quot;disciplines.vams&quot;
+          
         </div>
       </a>
 
@@ -379,7 +373,40 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2026-08-30 18:00" pubdate>
+            <time datetime="2026-08-30 18:49" pubdate>
+              2026-08-30
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2026/08/30/verilogA-decimal-to-binary/" target="_self">
+          VerilogA 十进制转二进制模型（8bit DAC 行为级实现）
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2026/08/30/verilogA-decimal-to-binary/" target="_self">
+        <div>
+          在模拟电路仿真中，经常需要为数字总线（bus）信号设置多 bit 输入。传统方式是逐位单独设置电压源，当位数较多时操作繁琐且容易出错。本文介绍一种基于 VerilogA 的 8 位十进制转二进制模型，只需修改一个十进制参数，即可自动生成对应的二进制电压输出，大幅提升仿真效率。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2026-08-30 18:20" pubdate>
               2026-08-30
             </time>
           </div>
@@ -410,11 +437,11 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E7%94%B5%E8%B7%AF%E4%BB%BF%E7%9C%9F/">#电路仿真</a>
+              <a href="/tags/VerilogA/">#VerilogA</a>
             
-              <a href="/tags/%E6%A8%A1%E6%8B%9F%E9%9B%86%E6%88%90%E7%94%B5%E8%B7%AF/">#模拟集成电路</a>
+              <a href="/tags/%E8%A1%8C%E4%B8%BA%E7%BA%A7%E5%BB%BA%E6%A8%A1/">#行为级建模</a>
             
-              <a href="/tags/verilogA/">#verilogA</a>
+              <a href="/tags/%E6%A8%A1%E6%8B%9F%E7%94%B5%E8%B7%AF%E4%BB%BF%E7%9C%9F/">#模拟电路仿真</a>
             
           </div>
         
@@ -425,13 +452,7 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2026/08/16/hspice-decimal-to-binary/" target="_self">
-          <img src="/img/random/3.png" srcset="/img/loading.gif" lazyload alt="HSPICE 仿真中十进制转二进制方法——简化多 bit 信号设置">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
+    <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
         <a href="/2026/08/16/hspice-decimal-to-binary/" target="_self">
@@ -440,7 +461,7 @@
       </h2>
 
       
-      <a class="index-excerpt " href="/2026/08/16/hspice-decimal-to-binary/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2026/08/16/hspice-decimal-to-binary/" target="_self">
         <div>
           在使用 HSPICE 进行仿真时，常需设置多 bit 信号。若逐 bit 单独设置，当位数较多时操作繁琐，且修改输入值耗时费力。本文介绍一种通过十进制转二进制的方法，只需改变十进制变量的赋值，即可自动设置对应的二进制信号，提升仿真效率。
         </div>
