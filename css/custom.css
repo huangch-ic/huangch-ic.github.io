@@ -1,52 +1,109 @@
 /* ==========================================================
-   学术风自定义样式 —— Stellar 1.44.0 专用
-   文件位置: ~/my-academic-blog/source/css/custom.css
+   学术风 · 内容优先配色 —— 完整版 custom.css
+   位置: ~/my-blog/source/css/custom.css
+   两个验证点(生效与否以 F12 为准):
+   ① 暗色:若 <html> 无 .dark 类,把第 1 节改为 media-query 写法
+   ② 宽度:若 --width-main 无效,搜主题真实的宽度变量名替换
    ========================================================== */
 
-/* ---------- 1. 布局加宽（核心修改） ----------
-   Stellar 主栏宽由 --width-main 控制（默认 720px，2K 屏 780px，4K 屏 860px）。
-   通过覆盖变量加宽到 1000px，比改 .l_main 的 max-width 更可靠，
-   且 2K/4K 屏的渐进加宽逻辑一并覆盖。 */
+/* ---------- 0. 配色系统 + 布局宽度 ---------- */
 :root {
-  --width-main: 1100px;      /* 默认屏幕 */
-}
-@media (min-width: 1920px) {
-  :root {
-    --width-main: 1100px;    /* 2K 屏 */
-  }
-}
-@media (min-width: 3840px) {
-  :root {
-    --width-main: 1200px;    /* 4K 屏 */
-  }
-}
+  --c-bg: #eef0f3;        /* 页面底:灰一档,衬托内容卡 */
+  --c-card: #ffffff;      /* 内容卡:最亮 */
+  --c-surface: #f7f8fa;   /* 侧栏/部件:略灰,视觉退后 */
+  --c-text: #1f2329;      /* 正文:最深 */
+  --c-text-1: #3d434c;
+  --c-text-2: #6b7280;
+  --c-text-3: #9aa1ab;
+  --c-border: #e3e6ea;
+  --c-link: #2563eb;
 
-/* 侧栏略加宽（默认 224px），让左栏卡片和右侧目录更从容 */
-:root {
+  /* 主题内部变量映射(名字以 F12 验证为准) */
+  --bg: var(--c-bg);
+  --card: var(--c-card);
+  --text: var(--c-text);
+  --text-p1: var(--c-text-1);
+  --text-p2: var(--c-text-2);
+  --text-p3: var(--c-text-3);
+  --block-border: var(--c-border);
+
+  /* 布局宽度:普通屏收敛,大屏放开 */
+  --width-main: 900px;
   --side-content-width: 244px;
 }
+@media (min-width: 1600px) {
+  :root { --width-main: 1100px; }
+}
+@media (min-width: 2400px) {
+  :root { --width-main: 1200px; }
+}
 
-/* ---------- 2. 正文排版（选择器：.md-text） ---------- */
+/* ---------- 1. 暗色模式 ----------
+   若 F12 显示 <html> 无 .dark 类(由系统偏好驱动),把本节整体换成:
+   @media (prefers-color-scheme: dark) { :root { ...同下方变量... } } */
+.dark {
+  --c-bg: #101318;
+  --c-card: #1a1f26;
+  --c-surface: #151a20;
+  --c-text: #e7eaee;
+  --c-text-1: #c3c9d1;
+  --c-text-2: #98a0aa;
+  --c-text-3: #6b737d;
+  --c-border: #2a3038;
+  --c-link: #6ea8ff;
+}
+
+/* ---------- 2. 背景与层级 ---------- */
+body { background: var(--c-bg); }
+
+/* 内容卡:页面唯一"浮起"的元素 */
+.md-text.content {
+  background: var(--c-card);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px rgba(16, 24, 40, .05);
+}
+
+/* ---------- 3. 侧栏:灰面 + 灰字,主动退后 ---------- */
+.l_left {
+  background: var(--c-surface) !important;
+  background-image: none !important;   /* 压掉 yml 背景图 */
+}
+.l_left, .l_left a {
+  color: var(--c-text-2);
+  font-size: 0.875rem;
+}
+.l_left a:hover { color: var(--c-link); }
+
+/* 激活项:浅蓝胶囊 + 主题蓝字 */
+.l_left .active {
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: var(--c-link) !important;
+}
+
+/* ---------- 4. 正文排版 ---------- */
 .md-text {
   font-size: 16px;
   line-height: 1.85;
   letter-spacing: 0.01em;
+  color: var(--c-text);
 }
 
-/* ---------- 3. 标题层级 ---------- */
+/* ---------- 5. 标题层级 ---------- */
 .md-text h1 {
   font-size: 1.8em;
   font-weight: 600;
   margin-top: 2em;
   margin-bottom: 0.8em;
   padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--block-border);   /* 适配暗色模式 */
+  border-bottom: 1px solid var(--c-border);
 }
 .md-text h2 {
   font-size: 1.5em;
   font-weight: 600;
   margin-top: 1.8em;
   margin-bottom: 0.6em;
+  color: var(--c-link);
+  border-bottom: 1px solid var(--c-border);
+  padding-bottom: 6px;
 }
 .md-text h3 {
   font-size: 1.25em;
@@ -55,79 +112,138 @@
   margin-bottom: 0.5em;
 }
 
-/* ---------- 4. 引用块（文献引用样式） ---------- */
+/* ---------- 6. 引用块 ---------- */
 .md-text blockquote {
-  border-left: 4px solid var(--theme);             /* 用主题色替代写死的蓝色 */
-  background: var(--block);                        /* 亮暗模式自动切换 */
+  border-left: 4px solid var(--c-link);
+  background: var(--c-surface);
   padding: 12px 16px;
-  color: var(--text-p2);
+  color: var(--c-text-2);
   border-radius: 0 8px 8px 0;
 }
-.md-text blockquote p {
-  margin: 0.3em 0;
-}
+.md-text blockquote p { margin: 0.3em 0; }
 
-/* ---------- 5. 代码块 ---------- */
+/* ---------- 7. 代码 ---------- */
 .md-text .highlight {
   border-radius: 8px;
   font-size: 0.9em;
 }
-/* 行内代码 */
-.md-text code:not(.highlight code) {
-  font-size: 0.88em;
-}
+.md-text code:not(.highlight code) { font-size: 0.88em; }
 
-/* ---------- 6. 表格（论文数据表样式） ---------- */
+/* ---------- 8. 表格 ---------- */
 .md-text table {
   width: 100%;
   border-collapse: collapse;
   margin: 1em 0;
   font-size: 0.95em;
-  display: table;              /* Stellar 默认把表格包在滚动容器里，还原为普通表格布局 */
+  display: table;
 }
-.md-text th,
-.md-text td {
-  border: 1px solid var(--block-border);
+.md-text th, .md-text td {
+  border: 1px solid var(--c-border);
   padding: 8px 12px;
   text-align: left;
 }
 .md-text th {
-  background: var(--block);    /* 表头底色随暗色模式变化 */
+  background: var(--c-surface);
   font-weight: 600;
 }
 .md-text tr:nth-child(even) {
-  background: color-mix(in srgb, var(--block) 60%, transparent);
+  background: color-mix(in srgb, var(--c-surface) 60%, transparent);
 }
 
-/* ---------- 7. KaTeX 公式（注意：不是 .MathJax） ---------- */
-.md-text .katex {
-  font-size: 1.05em;
-}
-.md-text .katex-display {      /* 独立公式行距 */
-  margin: 1.2em 0;
-}
+/* ---------- 9. KaTeX ---------- */
+.md-text .katex { font-size: 1.05em; }
+.md-text .katex-display { margin: 1.2em 0; }
 
-/* ---------- 8. 列表间距 ---------- */
-.md-text ul,
-.md-text ol {
+/* ---------- 10. 列表 ---------- */
+.md-text ul, .md-text ol {
   padding-left: 2em;
   margin: 0.5em 0;
 }
-.md-text li {
-  margin: 0.3em 0;
+.md-text li { margin: 0.3em 0; }
+
+/* ---------- 11+12. 横幅(外层白底裁切,内层透明) ---------- */
+.article-banner-wrap {
+  background: var(--c-card) !important;   /* 白底统一画在外层 */
+  border-radius: 6px 6px 0 0 !important;
+  overflow: hidden;                        /* 裁掉内层一切圆角/灰层 */
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
 }
 
-/* ---------- 9. 暗色模式微调 ----------
-   如果个别地方想用固定浅色值，务必在此处单独声明暗色对应值。
-   本文件已全部改用主题变量，此处仅作示例保留。 */
-@media (prefers-color-scheme: dark) {
-  /* 如需针对暗色微调，写在这里 */
+/* 内层:透明 + 直角,视觉全部由外层决定 */
+.article.banner.top {
+  background: transparent !important;
+  background-image: none !important;       /* 杀掉主题的灰渐变底 */
+  border-radius: 0 !important;
+  padding-top: 0.75rem;
+  padding-bottom: 1rem;
+}
+
+/* 主题的遮罩/装饰伪元素:未配封面图,直接关闭 */
+.article.banner.top::before,
+.article.banner.top::after,
+.article-banner-wrap::before,
+.article-banner-wrap::after {
+  display: none !important;
+}
+
+/* 标题与 meta(沿用原设定) */
+.article.banner.top h1.text.title {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-shadow: none;
+}
+.article.banner.top .meta-row { margin-bottom: 0.5rem; }
+.article.banner.top .post-meta {
+  font-size: 0.8125rem;
+  color: var(--c-text-2);
+}
+
+/* 内容卡:上直下圆,与横幅拼合 */
+.md-text.content {
+  border-radius: 0 0 6px 6px !important;
+  margin-top: 0 !important;
+}
+
+/* 若拼合处仍有灰色细缝,取消下一行注释(主列 flex gap 所致)
+#main.l_main { row-gap: 0; } */
+
+
+/* ---------- 13. 右栏 TOC:圆角 + 滚动条融入卡片 ---------- */
+.l_right .widget-wrapper {
+  border-radius: 6px !important;
+  overflow: hidden;
+}
+.l_right .widget-wrapper,
+.l_right .widget-wrapper * {
+  scrollbar-width: thin;                                       /* Firefox */
+  scrollbar-color: var(--c-border, #d8dde3) var(--c-card, #f9fafb);  /* 滑块灰 + 轨道=卡片色 */
+}
+.l_right .widget-wrapper ::-webkit-scrollbar { width: 6px; }
+.l_right .widget-wrapper ::-webkit-scrollbar-track {
+  background: var(--c-card, #f9fafb);   /* 轨道=卡片色 */
+}
+.l_right .widget-wrapper ::-webkit-scrollbar-thumb {
+  background: var(--c-border);
+  border-radius: 3px;
+}
+.l_right .widget-wrapper ::-webkit-scrollbar-thumb:hover {
+  background: var(--c-text-3);
+}
+
+/* 轨道竖线(main.css:9053 的 .widget-body::before)→ 融入卡片 */
+.l_right .widget-wrapper.toc .widget-body::before {
+  background: #f9fafb !important;
 }
 
 
-/* wiki 列表卡片：去掉封面视觉层，info 从绝对定位改回文档流
-   （源码中 info 是 absolute bottom:0，cover overflow:hidden，
-    仅塌缩高度会把它裁掉，必须改为 static 才能撑起卡片） */
+
+
+
+
+/* ---------- 14. wiki 列表卡片修复 ---------- */
 .post-list.wiki .wiki-card-cover {
   background: none;
   min-height: 0;
@@ -136,45 +252,45 @@
 }
 .post-list.wiki .wiki-card-cover > img,
 .post-list.wiki .wiki-card-cover:before,
-.post-list.wiki .wiki-card-cover:after {
-  display: none;
-}
+.post-list.wiki .wiki-card-cover:after { display: none; }
 .post-list.wiki .wiki-card-info {
-  position: static;            /* 关键：恢复文档流，撑起卡片高度 */
-  color: var(--text);          /* 防白字消失（无论 yml 里是否还有 cover） */
+  position: static;
+  color: var(--c-text);
 }
 .post-list.wiki .wiki-card-info .wiki-meta,
-.post-list.wiki .wiki-card-info .project-subtitle {
-  color: var(--text-p2);
-}
-.post-list.wiki .wiki-card-info .wiki-project {
-  background: var(--block);    /* 原为 rgba(black,.1)，换成主题变量适配暗色 */
+.post-list.wiki .wiki-card-info .project-subtitle { color: var(--c-text-2); }
+.post-list.wiki .wiki-card-info .wiki-project { background: var(--c-surface); }
 
+/* ---------- 15. 横幅紧凑化(叠加在 11+12 之后) ---------- */
 
-}
-
-
-/* 文章横幅：指定灰色 */
-.l_main .banner {
-  background: #ffffff;   /* 蓝灰调；想更深改 #e0e0e0，暖灰用 #f0f0ee */
-  padding-top: 0.1rem;
-  padding-bottom: 1.5rem;
+/* 上下留白:再压一档 */
+.article.banner.top {
+  padding-top: 0.4rem;       /* 原 0.75rem */
+  padding-bottom: 0.5rem;    /* 原 1rem */
 }
 
-/* 标题:加大一档、加重 */
-.l_main .banner h1.title {
-  font-size: 1.875rem;    /* 1.5rem → 1.875rem,即 30px */
-  font-weight: 700;       /* 600 → 700 */
-  line-height: 0.1;       /* 字大了行高略收,视觉更稳 */
-/*  font-family: "Noto Serif SC", "Source Han Serif SC", serif;*/
-  text-shadow: none;
+/* 主题若给内层 .content 配了默认上下 padding,一并归零
+   (只动上下,不碰左右,防止标题贴边;类名不存在则自动无效) */
+.article.banner.top .content {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
-/* meta 行:放大一点(可选,默认 0.75rem 挺小) */
-.l_main .banner .post-meta {
-  font-size: 0.8125rem;   /* 13px */
+/* 标题:字号降约一档、行距收紧、外间距压到最小 */
+.article.banner.top h1.text.title {
+  font-size: 1.375rem;       /* 原 1.875rem,高度约省 10px */
+  line-height: 1.3;
+  margin: 0.25rem 0 0;
 }
 
-/* 面包屑:一般不用动,要动同理 font-size */
+/* meta 行(发布于/字数/阅读时长)与面包屑:字号 -1 档、间距收紧 */
+.article.banner.top .meta-row,
+.article.banner.top .breadcrumb {
+  margin: 0 !important;
+  font-size: 0.75rem;        /* 原 0.8125rem */
+  line-height: 1.5;
+}
+.article.banner.top .meta-row { margin-bottom: 0.125rem !important; }
+
 
 
