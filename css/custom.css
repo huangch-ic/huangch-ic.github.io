@@ -292,5 +292,22 @@ body { background: var(--c-bg); }
 }
 .article.banner.top .meta-row { margin-bottom: 0.125rem !important; }
 
+/* ---------- 横幅卡片高度 ---------- */
+.article-banner-wrap {
+  height: 96px;
+  display: flex;
+  flex-direction: column;
+}
+.article-banner-wrap .article.banner.top {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 小屏退回自适应,防止长标题被裁 */
+@media (max-width: 640px) {
+  .article-banner-wrap { height: auto; min-height: 64px; }
+}
 
 
