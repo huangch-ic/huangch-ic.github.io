@@ -1,31 +1,25 @@
 /* ==========================================================
    学术风 · 内容优先配色 —— 完整版 custom.css
    位置: ~/my-blog/source/css/custom.css
+   统一灰面 = --c-surface(浅色 #f9fafb,即右栏原色;暗色 #151a20)
+   右栏只给 .widget-wrapper 上色,不涂 .l_right(否则整列被拉高)
    两个验证点(生效与否以 F12 为准):
    ① 暗色:若 <html> 无 .dark 类,把第 1 节改为 media-query 写法
-   ② 宽度:若 --width-main 无效,搜主题真实的宽度变量名替换
+   ② 宽度:若 --width-main 无效(计算值来源显示 main.css),
+      需换主题真实宽度变量名或提权(:root:root)
    ========================================================== */
 
 /* ---------- 0. 配色系统 + 布局宽度 ---------- */
 :root {
   --c-bg: #eef0f3;        /* 页面底:灰一档,衬托内容卡 */
   --c-card: #ffffff;      /* 内容卡:最亮 */
-  --c-surface: #f7f8fa;   /* 侧栏/部件:略灰,视觉退后 */
+  --c-surface: #f9fafb;   /* 左右栏/部件:统一灰面 = 右栏原色 */
   --c-text: #1f2329;      /* 正文:最深 */
   --c-text-1: #3d434c;
   --c-text-2: #6b7280;
   --c-text-3: #9aa1ab;
   --c-border: #e3e6ea;
   --c-link: #2563eb;
-
-  /* 主题内部变量映射(名字以 F12 验证为准) */
-  --bg: var(--c-bg);
-  --card: var(--c-card);
-  --text: var(--c-text);
-  --text-p1: var(--c-text-1);
-  --text-p2: var(--c-text-2);
-  --text-p3: var(--c-text-3);
-  --block-border: var(--c-border);
 
   /* 布局宽度:普通屏收敛,大屏放开 */
   --width-main: 900px;
@@ -40,7 +34,7 @@
 
 /* ---------- 1. 暗色模式 ----------
    若 F12 显示 <html> 无 .dark 类(由系统偏好驱动),把本节整体换成:
-   @media (prefers-color-scheme: dark) { :root { ...同下方变量... } } */
+   @media (prefers-color-scheme: dark) { ...同下方变量... } */
 .dark {
   --c-bg: #101318;
   --c-card: #1a1f26;
@@ -62,7 +56,7 @@ body { background: var(--c-bg); }
   box-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px rgba(16, 24, 40, .05);
 }
 
-/* ---------- 3. 侧栏:灰面 + 灰字,主动退后 ---------- */
+/* ---------- 3. 左栏:灰面 + 灰字,主动退后 ---------- */
 .l_left {
   background: var(--c-surface) !important;
   background-image: none !important;   /* 压掉 yml 背景图 */
@@ -161,7 +155,8 @@ body { background: var(--c-bg); }
 }
 .md-text li { margin: 0.3em 0; }
 
-/* ---------- 11+12. 横幅(外层白底裁切,内层透明) ---------- */
+/* ---------- 11+12. 横幅(外层白底裁切,内层透明) ----------
+   尺寸/字号统一在 15 节调,本节只管"底色与形状" */
 .article-banner-wrap {
   background: var(--c-card) !important;   /* 白底统一画在外层 */
   border-radius: 6px 6px 0 0 !important;
@@ -175,8 +170,6 @@ body { background: var(--c-bg); }
   background: transparent !important;
   background-image: none !important;       /* 杀掉主题的灰渐变底 */
   border-radius: 0 !important;
-  padding-top: 0.75rem;
-  padding-bottom: 1rem;
 }
 
 /* 主题的遮罩/装饰伪元素:未配封面图,直接关闭 */
@@ -185,20 +178,6 @@ body { background: var(--c-bg); }
 .article-banner-wrap::before,
 .article-banner-wrap::after {
   display: none !important;
-}
-
-/* 标题与 meta(沿用原设定) */
-.article.banner.top h1.text.title {
-  margin: 0;
-  font-size: 1.875rem;
-  font-weight: 700;
-  line-height: 1.25;
-  text-shadow: none;
-}
-.article.banner.top .meta-row { margin-bottom: 0.5rem; }
-.article.banner.top .post-meta {
-  font-size: 0.8125rem;
-  color: var(--c-text-2);
 }
 
 /* 内容卡:上直下圆,与横幅拼合 */
@@ -210,20 +189,22 @@ body { background: var(--c-bg); }
 /* 若拼合处仍有灰色细缝,取消下一行注释(主列 flex gap 所致)
 #main.l_main { row-gap: 0; } */
 
-
-/* ---------- 13. 右栏 TOC:圆角 + 滚动条融入卡片 ---------- */
+/* ---------- 13. 右栏:与左栏同色 + TOC 圆角滚动条 ----------
+   注意:只给 .widget-wrapper 上色!不涂 .l_right ——
+   它是栅格子项、默认拉伸到与主栏等高,涂了整列变成"高卡" */
 .l_right .widget-wrapper {
+  background: var(--c-surface) !important;   /* = 左栏色 */
   border-radius: 6px !important;
   overflow: hidden;
 }
 .l_right .widget-wrapper,
 .l_right .widget-wrapper * {
-  scrollbar-width: thin;                                       /* Firefox */
-  scrollbar-color: var(--c-border, #d8dde3) var(--c-card, #f9fafb);  /* 滑块灰 + 轨道=卡片色 */
+  scrollbar-width: thin;                        /* Firefox */
+  scrollbar-color: var(--c-border) var(--c-surface);
 }
 .l_right .widget-wrapper ::-webkit-scrollbar { width: 6px; }
 .l_right .widget-wrapper ::-webkit-scrollbar-track {
-  background: var(--c-card, #f9fafb);   /* 轨道=卡片色 */
+  background: var(--c-surface);   /* 轨道 = 卡面 */
 }
 .l_right .widget-wrapper ::-webkit-scrollbar-thumb {
   background: var(--c-border);
@@ -233,15 +214,10 @@ body { background: var(--c-bg); }
   background: var(--c-text-3);
 }
 
-/* 轨道竖线(main.css:9053 的 .widget-body::before)→ 融入卡片 */
+/* 轨道竖线(main.css 的 .widget-body::before)→ 直接移除 */
 .l_right .widget-wrapper.toc .widget-body::before {
-  background: #f9fafb !important;
+  content: none !important;
 }
-
-
-
-
-
 
 /* ---------- 14. wiki 列表卡片修复 ---------- */
 .post-list.wiki .wiki-card-cover {
@@ -261,40 +237,50 @@ body { background: var(--c-bg); }
 .post-list.wiki .wiki-card-info .project-subtitle { color: var(--c-text-2); }
 .post-list.wiki .wiki-card-info .wiki-project { background: var(--c-surface); }
 
-/* ---------- 15. 横幅紧凑化(叠加在 11+12 之后) ---------- */
-
-/* 上下留白:再压一档 */
+/* ---------- 15. 横幅紧凑化 + 高度(尺寸唯一入口) ---------- */
 .article.banner.top {
-  padding-top: 0.4rem;       /* 原 0.75rem */
-  padding-bottom: 0.5rem;    /* 原 1rem */
+  padding-top: 0.4rem;
+  padding-bottom: 0.5rem;
 }
 
-/* 主题若给内层 .content 配了默认上下 padding,一并归零
-   (只动上下,不碰左右,防止标题贴边;类名不存在则自动无效) */
+/* 两个内部容器:只清纵向,保留左右(对齐靠它们) */
+.article.banner.top .top,
+.article.banner.top .bottom {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.article.banner.top .bottom { padding-top: 0.25rem !important; }
+
 .article.banner.top .content {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
 
-/* 标题:字号降约一档、行距收紧、外间距压到最小 */
 .article.banner.top h1.text.title {
-  font-size: 1.375rem;       /* 原 1.875rem,高度约省 10px */
-  line-height: 1.3;
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.25;
   margin: 0.25rem 0 0;
+  text-shadow: none;
 }
 
-/* meta 行(发布于/字数/阅读时长)与面包屑:字号 -1 档、间距收紧 */
 .article.banner.top .meta-row,
 .article.banner.top .breadcrumb {
   margin: 0 !important;
-  font-size: 0.75rem;        /* 原 0.8125rem */
-  line-height: 1.5;
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
 .article.banner.top .meta-row { margin-bottom: 0.125rem !important; }
+.article.banner.top .post-meta {
+  font-size: 0.8125rem;
+  color: var(--c-text-2);
+}
 
-/* ---------- 横幅卡片高度 ---------- */
+/* 卡片高度:只留 min-height,内容超了自动长高,永不裁字 */
 .article-banner-wrap {
-  height: 96px;
+  min-height: 96px;
   display: flex;
   flex-direction: column;
 }
@@ -304,10 +290,22 @@ body { background: var(--c-bg); }
   flex-direction: column;
   justify-content: center;
 }
-
-/* 小屏退回自适应,防止长标题被裁 */
 @media (max-width: 640px) {
-  .article-banner-wrap { height: auto; min-height: 64px; }
+  .article-banner-wrap { min-height: 64px; }
 }
 
+/* ---------- 16. 文末标签 + 许可协议:与左右栏同色 ---------- */
+.article-tags a.tag {
+  background: var(--c-surface) !important;
+  color: var(--c-text-2);
+}
+.article-tags a.tag:hover {
+  background: var(--c-border);
+  color: var(--c-link);
+}
+
+.article-footer {
+  background: var(--c-surface) !important;
+  border-color: var(--c-border);
+}
 
